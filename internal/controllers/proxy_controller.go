@@ -43,7 +43,8 @@ func ProxyHandler(c *gin.Context) {
 
 	if !exist {
 		fmt.Print("Creating new session with ID: ", actualSessionID, "\n")
-		backend := services.PickBackend()
+		backend, nextInt := services.PickBackend()
+		services.ColdStartAtInd(nextInt)
 		session = services.CreateSession(actualSessionID, backend.URL)
 	} else {
 		fmt.Println("exist krta hai ")

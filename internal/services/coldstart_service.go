@@ -27,3 +27,7 @@ func ColdStart() {
 		go fetchBackend(backend)
 	}
 }
+
+func ColdStartAtInd(ind int) {
+	go fetchBackend(Backends[ind])
+}

@@ -36,7 +36,7 @@ func InitBackends() {
 	}
 }
 
-func PickBackend() *models.Backend {
+func PickBackend() (*models.Backend, int) {
 	LogUserCountsPerBackend()
 
 	maxBackendCount := config.GetBackendCount()
@@ -49,7 +49,7 @@ func PickBackend() *models.Backend {
 		if backend.ActiveUsers < config.GetMaxUsersPerServer() {
 			fmt.Println("Assigning to backend:", backend.URL, "Current users:", backend.ActiveUsers)
 			backend.ActiveUsers++
-			return backend
+			return backend, (i + 1) % limit
 		}
 	}
 
@@ -57,7 +57,7 @@ func PickBackend() *models.Backend {
 	Backends[roundRobin.Count].ActiveUsers++
 	fmt.Println("All backends at capacity. Assigning to backend (round-robin):", resBackend.URL, roundRobin.Count)
 	roundRobin.Count = (roundRobin.Count + 1) % limit
-	return resBackend
+	return resBackend, roundRobin.Count
 }
 
 func DecrementBackend(url string) {
