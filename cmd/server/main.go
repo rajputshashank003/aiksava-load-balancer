@@ -25,7 +25,7 @@ func main() {
 		port = "8080"
 	}
 
-	log.Println("Load Balancer running on :" + port)
+	log.Println("Aiksava Load Balancer running on :" + port)
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal(err)
 	}
