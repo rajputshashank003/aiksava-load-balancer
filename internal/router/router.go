@@ -2,6 +2,8 @@ package router
 
 import (
 	"aiksava-lb/internal/controllers"
+	"aiksava-lb/internal/middleware"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,15 +11,18 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.New()
 
-	// Trust all proxies for now (you can restrict this in production)
 	r.SetTrustedProxies(nil)
 
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.CORSMiddleware())
 
-	// CORS is handled in the proxy controller to avoid duplicate headers
-	
-	r.Any("/*proxyPath", controllers.ProxyHandler)
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
+	proxy := r.Group("/proxy")
+	proxy.Any("/*proxyPath", controllers.ProxyHandler)
 
 	return r
 }
