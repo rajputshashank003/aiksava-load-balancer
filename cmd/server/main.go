@@ -15,7 +15,7 @@ func main() {
 	}
 	
 	services.InitBackends()
-	services.ColdStart()
+	// services.ColdStart()
 	services.StartSessionCleanup()
 
 	r := router.SetupRouter()
