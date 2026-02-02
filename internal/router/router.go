@@ -3,6 +3,7 @@ package router
 import (
 	"aiksava-lb/internal/config"
 	"aiksava-lb/internal/controllers"
+	"aiksava-lb/internal/services"
 	"net/http"
 	"time"
 
@@ -44,6 +45,7 @@ func SetupRouter() *gin.Engine {
 	}))
 
 	r.GET("/health", func(c *gin.Context) {
+		services.FirstColdStart()
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
