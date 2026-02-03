@@ -9,7 +9,7 @@ import (
 
 func fetchBackend(backend *models.Backend) {
 	client := &http.Client{
-		Timeout: 90 * time.Second,
+		Timeout: 360 * time.Second,
 	}
 
 	resp, err := client.Get(backend.URL + "/health")
@@ -34,4 +34,14 @@ func FirstColdStart() {
 
 func ColdStartAtInd(ind int) {
 	go fetchBackend(Backends[ind])
+}
+
+func HealthCheck() {
+	ticker := time.NewTicker(12 * time.Minute)
+
+	go func() {
+		for range ticker.C {
+			fetchBackend(Backends[0])
+		}
+	}()
 }
