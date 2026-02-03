@@ -37,11 +37,12 @@ func ColdStartAtInd(ind int) {
 }
 
 func HealthCheck() {
-	ticker := time.NewTicker(12 * time.Minute)
+	// todo: uncomment this to start cron job for health checks
+	// ticker := time.NewTicker(12 * time.Minute)
 
-	go func() {
-		for range ticker.C {
-			fetchBackend(Backends[0])
-		}
-	}()
+	// go func() {
+	// 	for range ticker.C {
+	// 		fetchBackend(Backends[0])
+	// 	}
+	// }()
 }
