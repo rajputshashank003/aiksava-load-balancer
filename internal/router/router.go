@@ -18,14 +18,7 @@ func SetupRouter() *gin.Engine {
 
 	r.Use(cors.New(cors.Config{
 		AllowOriginFunc: func(origin string) bool {
-			if config.IsAllowedOrigin(origin) {
-				return true
-			}
-			return origin == "http://localhost:8000" ||
-				origin == "http://127.0.0.1:8000" ||
-				origin == "http://[::1]:8000" ||
-				origin == "https://aiksava.onrender.com" ||
-				origin == "https://aiksava.vercel.app"
+			return config.IsAllowedOrigin(origin)
 		},
 		AllowMethods: []string{
 			"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD",
@@ -53,5 +46,8 @@ func SetupRouter() *gin.Engine {
 	api := r.Group("/api")
 	api.Any("/*apiPath", controllers.ProxyHandler)
 
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotImplemented, gin.H{"error": "Endpoint not implemented"})
+	})
 	return r
 }

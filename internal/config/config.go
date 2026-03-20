@@ -38,14 +38,14 @@ func GetSessionTTL() time.Duration {
 func GetAllowedOrigins() []string {
 	origins := os.Getenv("ALLOWED_ORIGINS")
 	if origins == "" {
-		// Default origins matching your frontend config
+		if os.Getenv("ENVIRONMENT") != PRODUCTION {
+			return []string{"http://localhost:8000"}
+		}
 		return []string{
 			"https://aiksava.onrender.com",
 			"https://aiksava.vercel.app",
-			"http://localhost:8000",
 		}
 	}
-	// Split comma-separated origins
 	var result []string
 	for _, origin := range splitAndTrim(origins, ",") {
 		if origin != "" {
